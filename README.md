@@ -2,7 +2,7 @@
 
 Transpiling Lua/Python like code into CatWeb JSON!
 
-To use this, you now have to go to https://CatwebWriter.github.io/
+To use this, you now have to go to https://nathanlists.github.io/CatWebWriter/
 Never been easier!
 
 ## Documentation
