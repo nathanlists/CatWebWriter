@@ -38,3 +38,4 @@ end
 ```
 
 2. No semicolons at the end of lines!
+3. The engine is a simple interpreter, meaning there will be limited functionality.
