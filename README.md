@@ -1,6 +1,6 @@
 # CatwebWriter (Lua to CatWeb Compiler)
 
-Transpiling Lua like code into CatWeb JSON!
+Compiling Lua code into CatWeb JSON!
 
 To use this, you now have to go to https://nathanlists.github.io/CatWebWriter/
 Never been easier!
@@ -9,7 +9,7 @@ Never been easier!
 
 ### I. INTRODUCTION
 
-This language was created for a Roblox game called [CatWeb](https://www.roblox.com/games/16855862021/CatWeb-Make-a-Website), to make **complex CatWeb sites** much easier. CatWeb was not intended for complex sites, so you will struggle when making them. To make it easier, I made a Lua compiler for CatWeb. It supports expressions, if statements, and more. Any valid Lua code **may** be accepted by this compiler.
+This compiler was created for a Roblox game called [CatWeb](https://www.roblox.com/games/16855862021/CatWeb-Make-a-Website), to make **complex CatWeb sites** much easier. CatWeb was not intended for complex sites, so you will struggle when making them. To make it easier, I made a Lua compiler for CatWeb. It supports expressions, if statements, and more. Any valid Lua code **may** be accepted by this compiler.
 
 Best thing of all, it is **COMPLETELY FREE!** No paywalls just to improve code.
 
