@@ -9,18 +9,19 @@
 </head>
 <body>
   <div class="topbar">
-    <h1 id="mainh1">CatVB Compiler</h1>
-    <button id="codesubmit">Transpile code</button>
+    <h1 id="mainh1">Lua to CatWeb Compiler</h1>
+    <button id="codesubmit">Compile code</button>
     <button id="changealias">Change script alias</button>
+    <button id="indent">Add indent</button>
   </div>
   <br>
     <label for="message">Code:</label>
   <br>
     <textarea id="message" name="message" rows="20" cols="50" placeholder="Type your code here..."></textarea>
   <br>
-  <textarea id="console" name="message" rows="5" cols="50" placeholder="Console"></textarea>
+  <textarea id="console" name="message" rows="5" cols="50" placeholder="Console Output..."></textarea>
   <br>
-  <textarea id="output" name="message" rows="20" cols="50" placeholder="Output goes here..."></textarea> 
+  <textarea id="output" name="message" rows="20" cols="50" placeholder="Output of the compiler..."></textarea> 
     <script type="module" src="scripts/main.js"></script>
 </body>
 </html>
