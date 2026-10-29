@@ -23,3 +23,18 @@ These features are supported and compile easily to CatWeb JSON:
 * Math expressions when declaring variables
 * For loops (no loop through tables yet)
 * If statements
+
+These features have been simplified:
+
+* Functions (no local at start!)
+
+### NOTES AND ADDITIONS TO LUA
+
+1. Entry point - Declare a function named website_loaded.
+```lua
+function website_loaded()
+   print("Hello, World!")
+end
+```
+
+2. No semicolons at the end of lines!
