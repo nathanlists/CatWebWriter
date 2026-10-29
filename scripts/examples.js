@@ -7,8 +7,7 @@ const examples = {
       text: ["Log", {
         value: "",
         t: "any"
-      }],
-      globalid: "Z<"
+      }]
     },
     11: {
       id: "11",
@@ -35,23 +34,33 @@ const examples = {
         "t": "string",
         "l": "function"
       }, {
-          "value": [{
-            "value": "ta",
-            "l": "any",
-            "t": "string"
-          }, {
-            "value": "tb",
-            "t": "string",
-            "l": "any"
-          }],
-          "t": "tuple"
-        }, "→", {
-          "value": "b",
+        value: [{
+          "value": "ta",
+          "l": "any",
+          "t": "string"
+        }, {
+          "value": "tb",
           "t": "string",
-          "l": "variable?"
+          "l": "any"
         }],
+        "t": "tuple"
+      }, "→", {
+        "value": "b",
+        "t": "string",
+        "l": "variable?"
+      }],
       "globalid": "@F"
-    }
+    },
+    18: {"text":["If",{"value":"a","l":"any","t":"string"},"is equal to",{"value":"b","l":"any","t":"string"}],"globalid":"9L","id":"18"},
+    25: {"id":"25","text":["end"],"globalid":"Nb"},
+    12: {"id":"12","text":["Increase",{"value":"a","l":"variable","t":"string"},"by",{"value":"1","t":"number"}],"globalid":"#g"},
+    13: {"id":"13","text":["Decrease",{"value":"a","l":"variable","t":"string"},"by",{"value":"1","t":"number"}],"globalid":"ib"},
+    14: {"id":"14","text":["Multiply",{"value":"a","l":"variable","t":"string"},"by",{"t":"number","value":"1"}],"globalid":"j`"},
+    15: {"id":"15","text":["Divide",{"value":"a","l":"variable","t":"string"},"by",{"value":"1","t":"number"}],"globalid":"h0"},
+    40: {"id":"40","text":["Raise",{"value":"a","l":"variable","t":"string"},"to the power of",{"value":"1","t":"number"}],"globalid":"Y*"},
+    22: {"id":"22","text":["Repeat",{"t":"number"},"times"],"globalid":"8g"},
+    20: {"text":["If",{"t":"string","l":"any"},"is greater than",{"t":"string","l":"any"}],"globalid":"3S","id":"20"},
+    21: {"text":["If",{"t":"string","l":"any"},"is lower than",{"t":"string","l":"any"}],"globalid":"BB","id":"21"}
   },
   "script": [{
     "class": "script",
@@ -59,7 +68,7 @@ const examples = {
     "alias": "Script",
     "content": []
   }],
-  "websiteloaded": {
+  "website_loaded": {
     "y": "4908",
     "x": "4876",
     "globalid": "t.",
@@ -70,7 +79,7 @@ const examples = {
   },
   "func": {
     "y": "4911.4443359375",
-    "variable_overrides": [],
+    "variable_overrides": [{"value":"a"}, {"value":"b"}],
     "x": "4837.0322265625",
     "globalid": "|^",
     "id": "6",
@@ -91,32 +100,71 @@ function getRandomIntInclusive(min, max) {
 }
 
 function randomglobalid() {
-  const char1 = String.fromCharCode(getRandomIntInclusive(33, 126));
-  const char2 = String.fromCharCode(getRandomIntInclusive(33, 126));
+  const char1 = String.fromCharCode(getRandomIntInclusive(33, 96));
+  const char2 = String.fromCharCode(getRandomIntInclusive(33, 96));
   return char1 + char2;
 }
+function processValue(value) {
 
-export function retObj(id, v = []) {
-  if (!examples.blocks[id]) {
-    throw new Error(`Template with id "${id}" does not exist.`);
-  }
+    if (value.startsWith("{") && value.endsWith("}")) {
+        const expression = value.slice(1, -1);
 
-  const obj = structuredClone(examples.blocks[id]);
-  const inputObjects = obj.text.filter(
-    item => item !== null && typeof item === "object"
-  );
-
-  inputObjects.forEach((inputObj, index) => {
-    if (typeof inputObj.value != "object") {
-      inputObj.value = v[index] ?? "";
+        try {
+            return String(math.evaluate(expression));
+        } catch (error) {
+            throw new Error(`Invalid constant expression: ${expression}`);
+        }
     }
+
+    return value;
+}
+export function retObj(id, v = [], tv = []) {
+    if (!examples.blocks[id]) {
+        throw new Error(`Template with id "${id}" does not exist.`);
+    }
+  v.forEach((vl, ind) => {
+    v[ind] = vl;
   });
+  tv.forEach((vl, ind) => {
+    tv[ind] = vl;
+  });
+    v = v.map(val => {
+        if (
+            typeof val === "string" &&
+            val.startsWith('"') &&
+            val.endsWith('"')
+        ) {
+            return val.slice(1, -1);
+        }
 
-  if (Object.hasOwn(obj, "globalid")) {
-    obj.globalid = randomglobalid();
-  }
+        return val;
+    });
 
-  return obj;
+    const obj = structuredClone(examples.blocks[id]);
+
+    const inputObjects = obj.text.filter(
+        item => item !== null && typeof item === "object"
+    );
+
+    inputObjects.forEach((inputObj, index) => {
+
+        // Normal input
+        if (inputObj.t !== "tuple") {
+            inputObj.value = String(v[index] ?? "");
+            return;
+        }
+              // Tuple input
+        inputObj.value.forEach((tupleObj, tupleIndex) => {
+          console.log(tv[tupleIndex])
+            tupleObj.value = String(tv[tupleIndex] ?? "");
+        });
+    });
+
+    if (Object.hasOwn(obj, "globalid")) {
+        obj.globalid = randomglobalid();
+    }
+
+    return obj;
 }
 export function returnEventobj(func, code) {
   const funcJSON = structuredClone(examples[func])
@@ -131,8 +179,9 @@ export function returnFunctionobj(func, code, params) {
   funcJSON["globalid"] = randomglobalid();
   return funcJSON
 }
-export function returnScriptobj(objs) {
+export function returnScriptobj(objs, oname) {
   const scriptJSON = structuredClone(examples["script"]);
   scriptJSON[0]["content"] = objs;
+  scriptJSON[0]["alias"] = oname;
   return scriptJSON;
 }
